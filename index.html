@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MESNEVI External</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* CSS */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f4f4f5;
+            --bg-card: #ffffff;
+            --border-color: #e4e4e7;
+            --text-primary: #09090b;
+            --text-secondary: #71717a;
+            --accent-black: #09090b;
+            --accent-white: #ffffff;
+            --badge-bg: #f4f4f5;
+            --badge-text: #18181b;
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+            --radius-lg: 28px;
+            --radius-md: 20px;
+            --radius-sm: 12px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #09090b;
+            --bg-secondary: #18181b;
+            --bg-card: #121215;
+            --border-color: #27272a;
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --accent-black: #ffffff;
+            --accent-white: #09090b;
+            --badge-bg: #27272a;
+            --badge-text: #f4f4f5;
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comfortaa', cursive, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Header & Nav */
+        header {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background-color: var(--text-primary);
+            color: var(--bg-primary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .theme-toggle-btn {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 18px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1000px;
+            margin: 60px auto 40px auto;
+            padding: 0 24px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-primary);
+            border-radius: 50%;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--text-secondary);
+            max-width: 720px;
+            margin: 0 auto 40px auto;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-black);
+            color: var(--accent-white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        /* Features Grid */
+        .features-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 24px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background-color: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .code-block {
+            background-color: var(--bg-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            margin-top: auto;
+        }
+
+        .code-block * {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding: 32px 24px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">M</div>
+            <div class="logo-text">MESNEVI</div>
+        </div>
+        <button class="theme-toggle-btn" id="themeToggle">
+            <span id="themeIcon">🌓</span>
+            <span id="themeText">Auto</span>
+        </button>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-badge">
+                <span class="dot"></span> High Performance Go Engine
+            </div>
+            <h1>Player Tracking & Visualization Redefined</h1>
+            <p>MESNEVI External is a cutting-edge player tracking tool written in Go. Designed for ultra-low overhead using native Windows GDI and Win32 APIs via direct memory reading (RPM).</p>
+            <div class="cta-group">
+                <a href="#features" class="btn btn-primary">Explore Architecture</a>
+                <a href="#details" class="btn btn-secondary">System Specs</a>
+            </div>
+        </section>
+
+        <section class="features-section" id="features">
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">⚡</div>
+                    <h3>Written in Go</h3>
+                    <p>Built with Golang for exceptional execution speed, concurrent processing, and minimal resource usage.</p>
+                    <div class="code-block">runtime.GOMAXPROCS()</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Direct Memory Reading</h3>
+                    <p>Leverages native ReadProcessMemory (RPM) Windows APIs to fetch game state without invasive hooks.</p>
+                    <div class="code-block">kernel32.ReadProcessMemory</div>
+                </div>
+
+                <div class="card">
+                    <div class="card-icon">🖼️</div>
+                    <h3>Native Windows GDI</h3>
+                    <p>Renders overlay graphics smoothly using Win32 GDI & User32 APIs, eliminating heavy third-party rendering libraries.</p>
+                    <div class="code-block">win32.GetDC() / BitBlt()</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 MESNEVI External. Built for high performance & stealth.</p>
+    </footer>
+
+    <script>
+        // JavaScript
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+
+        // Theme management
+        const SystemTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        
+        let currentMode = localStorage.getItem('themeMode') || 'auto';
+
+        function applyTheme(mode) {
+            let activeTheme = mode;
+            if (mode === 'auto') {
+                activeTheme = SystemTheme();
+            }
+
+            document.documentElement.setAttribute('data-theme', activeTheme);
+            
+            if (mode === 'auto') {
+                themeIcon.textContent = '🌓';
+                themeText.textContent = 'Auto';
+            } else if (mode === 'dark') {
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark';
+            } else {
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light';
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (currentMode === 'auto') {
+                currentMode = 'dark';
+            } else if (currentMode === 'dark') {
+                currentMode = 'light';
+            } else {
+                currentMode = 'auto';
+            }
+            
+            localStorage.setItem('themeMode', currentMode);
+            applyTheme(currentMode);
+        });
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (currentMode === 'auto') {
+                applyTheme('auto');
+            }
+        });
+
+        applyTheme(currentMode);
+    </script>
+</body>
+</html>
