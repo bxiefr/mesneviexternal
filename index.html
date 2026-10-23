@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MESNEVI External | CS2 Tracking Tool</title>
+    <title>MESNEVI External | CS2 External Software</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,32 +12,34 @@
         :root {
             --bg-primary: #ffffff;
             --bg-secondary: #f4f4f5;
-            --bg-card: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.85);
             --border-color: #e4e4e7;
             --text-primary: #09090b;
-            --text-secondary: #71717a;
+            --text-secondary: #52525b;
             --accent-black: #09090b;
             --accent-white: #ffffff;
-            --badge-bg: #f4f4f5;
+            --badge-bg: rgba(244, 244, 245, 0.9);
             --badge-text: #18181b;
-            --shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.15);
             --radius-lg: 28px;
             --radius-md: 20px;
             --radius-sm: 12px;
+            --bg-overlay: rgba(255, 255, 255, 0.4);
         }
 
         [data-theme="dark"] {
             --bg-primary: #09090b;
             --bg-secondary: #18181b;
-            --bg-card: #121215;
+            --bg-card: rgba(18, 18, 21, 0.85);
             --border-color: #27272a;
             --text-primary: #f4f4f5;
             --text-secondary: #a1a1aa;
             --accent-black: #ffffff;
             --accent-white: #09090b;
-            --badge-bg: #27272a;
+            --badge-bg: rgba(39, 39, 42, 0.9);
             --badge-text: #f4f4f5;
-            --shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            --shadow: 0 10px 30px -10px rgba(0,0,0,0.7);
+            --bg-overlay: rgba(9, 9, 11, 0.65);
         }
 
         * {
@@ -55,6 +57,33 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Background CS2 Image with Blur */
+        .bg-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px) brightness(0.85);
+            transform: scale(1.05);
+            z-index: -2;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-overlay);
+            z-index: -1;
+            backdrop-filter: blur(8px);
         }
 
         /* Header & Nav */
@@ -93,8 +122,32 @@
             letter-spacing: -0.5px;
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .github-link {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 18px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .github-link:hover {
+            opacity: 0.85;
+        }
+
         .theme-toggle-btn {
-            background-color: var(--bg-secondary);
+            background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
             padding: 10px 18px;
@@ -114,7 +167,7 @@
         /* Hero Section */
         .hero {
             max-width: 1000px;
-            margin: 50px auto 30px auto;
+            margin: 40px auto 30px auto;
             padding: 0 24px;
             text-align: center;
         }
@@ -154,7 +207,7 @@
             max-width: 720px;
             margin: 0 auto 36px auto;
             line-height: 1.7;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .cta-group {
@@ -188,7 +241,7 @@
         }
 
         .btn-secondary {
-            background-color: var(--bg-secondary);
+            background-color: var(--bg-card);
             color: var(--text-primary);
             border: 1px solid var(--border-color);
         }
@@ -200,7 +253,7 @@
         /* Download Section */
         .download-section {
             max-width: 1200px;
-            margin: 40px auto 20px auto;
+            margin: 30px auto 20px auto;
             padding: 0 24px;
         }
 
@@ -213,6 +266,7 @@
             text-align: center;
             max-width: 800px;
             margin: 0 auto;
+            backdrop-filter: blur(12px);
         }
 
         .download-card h2 {
@@ -220,11 +274,40 @@
             margin-bottom: 12px;
         }
 
+        /* Branch Selector Switcher */
+        .branch-selector {
+            display: inline-flex;
+            background-color: var(--bg-secondary);
+            padding: 4px;
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            margin: 16px 0 20px 0;
+            gap: 4px;
+        }
+
+        .branch-btn {
+            padding: 8px 18px;
+            border-radius: 999px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .branch-btn.active {
+            background-color: var(--accent-black);
+            color: var(--accent-white);
+            box-shadow: var(--shadow);
+        }
+
         .download-meta {
             display: flex;
             justify-content: center;
-            gap: 24px;
-            margin: 20px 0 28px 0;
+            gap: 16px;
+            margin: 10px 0 28px 0;
             color: var(--text-secondary);
             font-size: 0.85rem;
             flex-wrap: wrap;
@@ -235,6 +318,7 @@
             padding: 6px 14px;
             border-radius: 999px;
             border: 1px solid var(--border-color);
+            font-weight: 600;
         }
 
         /* Features Grid */
@@ -265,6 +349,7 @@
             display: flex;
             flex-direction: column;
             gap: 16px;
+            backdrop-filter: blur(12px);
         }
 
         .card-icon {
@@ -288,7 +373,7 @@
             color: var(--text-secondary);
             font-size: 0.9rem;
             line-height: 1.6;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .code-block {
@@ -314,74 +399,93 @@
             text-align: center;
             color: var(--text-secondary);
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
+            background-color: var(--bg-card);
+            backdrop-filter: blur(12px);
         }
     </style>
 </head>
 <body>
+
+    <!-- CS2 Combat Background with Blur Overlay -->
+    <div class="bg-background"></div>
+    <div class="bg-overlay"></div>
 
     <header>
         <div class="logo-container">
             <div class="logo-icon">M</div>
             <div class="logo-text">MESNEVI External</div>
         </div>
-        <button class="theme-toggle-btn" id="themeToggle">
-            <span id="themeIcon">🌓</span>
-            <span id="themeText">Auto</span>
-        </button>
+        <div class="header-actions">
+            <a href="https://github.com/bxiefr/mesnevi_external" target="_blank" class="github-link">
+                <span>📦</span> GitHub
+            </a>
+            <button class="theme-toggle-btn" id="themeToggle">
+                <span id="themeIcon">🌓</span>
+                <span id="themeText">Auto</span>
+            </button>
+        </div>
     </header>
 
     <main>
         <section class="hero">
             <div class="hero-badge">
-                <span class="dot"></span> Counter-Strike 2 Memory Tool
+                <span class="dot"></span> Counter-Strike 2 Memory Engine
             </div>
-            <h1>CS2 External Player Tracking & Overlay</h1>
-            <p>MESNEVI External is a high-performance CS2 player tracking and visualization tool developed in Go. Built with direct memory reading (RPM) and native Windows GDI for ultra-low latency without game manipulation.</p>
+            <h1>CS2 External Player Tracking & Visualization</h1>
+            <p>MESNEVI External is a high-performance CS2 memory visualization tool written in Go. Operating via direct RPM (ReadProcessMemory) & Win32 GDI overlays with full auto-compilation offset updating.</p>
             <div class="cta-group">
-                <a href="#download" class="btn btn-primary"><span>⬇</span> Download Latest</a>
-                <a href="#features" class="btn btn-secondary">System Features</a>
+                <a href="#download" class="btn btn-primary"><span>⬇</span> Download Releases</a>
+                <a href="https://github.com/bxiefr/mesnevi_external" target="_blank" class="btn btn-secondary">Source Code</a>
             </div>
         </section>
 
-        <!-- Download Section -->
+        <!-- Dynamic Download Section -->
         <section class="download-section" id="download">
             <div class="download-card">
-                <h2>Get MESNEVI for CS2</h2>
-                <p style="color: var(--text-secondary); font-size: 0.95rem;">Compiled binary for x64 Windows systems. Run as administrator after launching CS2.</p>
-                <div class="download-meta">
-                    <span>Version: v1.0.2</span>
-                    <span>Target: Counter-Strike 2</span>
-                    <span>Arch: x64 Windows</span>
+                <h2>Download MESNEVI</h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Select your preferred branch for deployment:</p>
+                
+                <!-- Branch Selector -->
+                <div class="branch-selector">
+                    <button class="branch-btn active" id="branchMain">main</button>
+                    <button class="branch-btn" id="branchNewFeatures">newfeatures</button>
                 </div>
+
+                <div class="download-meta">
+                    <span id="metaBranch">Branch: main</span>
+                    <span id="metaTarget">Target: CS2 (Latest Offsets)</span>
+                    <span id="metaAutoUpdate">Auto-Offset Fetch: Active</span>
+                </div>
+
                 <div class="cta-group">
-                    <a href="#" class="btn btn-primary" id="downloadBtn"><span>⬇</span> Download Executable (.exe)</a>
+                    <a href="https://github.com/bxiefr/mesnevi_external/releases" target="_blank" class="btn btn-primary" id="downloadBtn"><span>⬇</span> Download Latest Release</a>
                 </div>
             </div>
         </section>
 
-        <!-- Features Section -->
+        <!-- Features Grid -->
         <section class="features-section" id="features">
-            <h2 class="section-title">Technical Architecture</h2>
+            <h2 class="section-title">Core Architecture & Features</h2>
             <div class="grid">
                 <div class="card">
-                    <div class="card-icon">⚡</div>
-                    <h3>Written in Go</h3>
-                    <p>Engineered entirely in Golang for lightweight binary distribution, zero extra runtime dependencies, and high-frequency memory scanning.</p>
-                    <div class="code-block">go build -ldflags="-s -w"</div>
+                    <div class="card-icon">🔄</div>
+                    <h3>Auto-Updating Offsets</h3>
+                    <p>The software automatically fetches the latest CS2 game offsets on startup and re-compiles itself seamlessly whenever Counter-Strike 2 receives a game patch.</p>
+                    <div class="code-block">fetchOffsets() -> recompiling...</div>
                 </div>
 
                 <div class="card">
                     <div class="card-icon">🎯</div>
                     <h3>Direct Memory Reading</h3>
-                    <p>Uses native ReadProcessMemory (RPM) Win32 APIs to safely read CS2 entity lists, health values, and 3D player coordinates.</p>
+                    <p>Leverages native Win32 ReadProcessMemory (RPM) APIs to continuously sample CS2 player positions, entity vectors, and health data with minimal CPU impact.</p>
                     <div class="code-block">kernel32.ReadProcessMemory</div>
                 </div>
 
                 <div class="card">
                     <div class="card-icon">🖼️</div>
                     <h3>Native Windows GDI</h3>
-                    <p>Renders smooth overlay visuals using native Win32 GDI & User32 APIs directly on screen without hooking game rendering engines.</p>
+                    <p>Renders smooth overlay visuals natively via Win32 GDI & User32 APIs, eliminating heavy third-party rendering frameworks for maximum stealth.</p>
                     <div class="code-block">win32.GetDC() / BitBlt()</div>
                 </div>
             </div>
@@ -389,7 +493,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 MESNEVI External. Designed specifically for CS2 player tracking & memory analysis.</p>
+        <p>&copy; 2026 MESNEVI External | Developed by <a href="https://github.com/bxiefr" target="_blank" style="color: inherit; text-decoration: underline;">bxiefr</a></p>
     </footer>
 
     <script>
@@ -397,9 +501,28 @@
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         const themeText = document.getElementById('themeText');
+
+        const branchMain = document.getElementById('branchMain');
+        const branchNewFeatures = document.getElementById('branchNewFeatures');
+        const metaBranch = document.getElementById('metaBranch');
         const downloadBtn = document.getElementById('downloadBtn');
 
-        // Theme management
+        // Dynamic Branch Selection Logic
+        branchMain.addEventListener('click', () => {
+            branchMain.classList.add('active');
+            branchNewFeatures.classList.remove('active');
+            metaBranch.textContent = 'Branch: main';
+            downloadBtn.href = 'https://github.com/bxiefr/mesnevi_external/releases';
+        });
+
+        branchNewFeatures.addEventListener('click', () => {
+            branchNewFeatures.classList.add('active');
+            branchMain.classList.remove('active');
+            metaBranch.textContent = 'Branch: newfeatures (Experimental)';
+            downloadBtn.href = 'https://github.com/bxiefr/mesnevi_external/tree/newfeatures';
+        });
+
+        // Theme Management
         const SystemTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         
         let currentMode = localStorage.getItem('themeMode') || 'auto';
@@ -441,12 +564,6 @@
             if (currentMode === 'auto') {
                 applyTheme('auto');
             }
-        });
-
-        // Download button action demo
-        downloadBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('MESNEVI External CS2 indirme bağlantısı çalıştırıldı!');
         });
 
         applyTheme(currentMode);
