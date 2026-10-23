@@ -60,14 +60,14 @@
             position: relative;
         }
 
-        /* Background CS2 Mirage Image with Blur */
+        /* Background CS2 Mirage Image from Direct Link */
         .bg-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-image: url('resim.jpg');
+            background-image: url('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdaddyskins.com%2Fblog%2Fwp-content%2Fuploads%2F2024%2F08%2Fcs2-mirage-updated.jpg&f=1&nofb=1&ipt=a0cff377302dbbdda2ea2df44c98f7d1b3af7910f445e897a9083f03377a563c&ipo=images');
             background-size: cover;
             background-position: center;
             filter: blur(10px) brightness(0.85);
@@ -248,6 +248,116 @@
 
         .btn-secondary:hover {
             background-color: var(--border-color);
+        }
+
+        /* Showcase / Screenshot Carousel Section */
+        .showcase-section {
+            max-width: 1000px;
+            margin: 30px auto 20px auto;
+            padding: 0 24px;
+        }
+
+        .carousel-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(12px);
+            text-align: center;
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background-color: #0d0d11;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+            width: 100%;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .window-crop-box {
+            width: 100%;
+            height: 480px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Image Cropping to hide terminal title bar and disk path */
+        .window-crop-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Focus specifically on the ASCII title & Menu area, cropping out top tab bar */
+            object-position: 50% 55%;
+            transform: scale(1.08);
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .carousel-btn {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-btn:hover {
+            background-color: var(--accent-black);
+            color: var(--accent-white);
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .dot-indicator.active {
+            background-color: var(--text-primary);
+            width: 24px;
+            border-radius: 999px;
         }
 
         /* Download Section */
@@ -446,6 +556,30 @@
             </div>
         </section>
 
+        <!-- Image Cycle / Showcase Section -->
+        <section class="showcase-section">
+            <div class="carousel-card">
+                <h2 style="font-size: 1.4rem; margin-bottom: 16px;">Console Interface & Hotkeys</h2>
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carouselTrack">
+                        <!-- Slide 1: Cropped Console Interface -->
+                        <div class="carousel-slide">
+                            <div class="window-crop-box">
+                                <img src="resim_2.jpg" alt="MESNEVI Console Menu Interface">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-nav">
+                    <button class="carousel-btn" id="prevBtn">&lt;</button>
+                    <div class="carousel-dots" id="carouselDots">
+                        <span class="dot-indicator active"></span>
+                    </div>
+                    <button class="carousel-btn" id="nextBtn">&gt;</button>
+                </div>
+            </div>
+        </section>
+
         <!-- Dynamic Download Section -->
         <section class="download-section" id="download">
             <div class="download-card">
@@ -514,6 +648,27 @@
         const metaBranch = document.getElementById('metaBranch');
         const metaBuildDate = document.getElementById('metaBuildDate');
         const downloadBtn = document.getElementById('downloadBtn');
+
+        // Carousel / Cycle Script
+        const track = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentSlide = 0;
+        const totalSlides = document.querySelectorAll('.carousel-slide').length;
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide > 0) ? currentSlide - 1 : totalSlides - 1;
+            updateCarousel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide < totalSlides - 1) ? currentSlide + 1 : 0;
+            updateCarousel();
+        });
 
         // Fetch latest commit/build date dynamically from GitHub API
         async function fetchBuildDate(branch = 'main') {
