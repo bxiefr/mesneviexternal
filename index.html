@@ -334,43 +334,57 @@
             box-shadow: 0 4px 15px var(--accent-glow);
         }
 
-        /* Hotkey Grid (Sadece Kısayollar) */
-        .hotkeys-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 12px;
-            margin-top: 20px;
+        /* Hotkeys Single Column List (Düzeltilmiş Temiz Liste) */
+        .hotkeys-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 700px;
+            margin: 0 auto;
             font-family: 'JetBrains Mono', monospace;
         }
 
-        .hotkey-item {
+        .hotkey-row {
             background: rgba(125, 125, 125, 0.04);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 12px 18px;
+            border-radius: 10px;
+            padding: 12px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
-        .hotkey-item:hover {
+        .hotkey-row:hover {
             border-color: var(--border-accent);
         }
 
-        .key-code {
+        .key-badge {
             color: var(--accent-blue);
             font-weight: 700;
+            min-width: 65px;
         }
 
-        .key-label {
+        .key-name {
+            flex-grow: 1;
             color: var(--text-primary);
+            padding-left: 15px;
         }
 
         .key-options {
             color: var(--accent-purple);
-            font-size: 0.78rem;
+            font-size: 0.8rem;
             font-weight: 600;
+        }
+
+        .hotkey-row.end-key {
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.03);
+        }
+
+        .hotkey-row.end-key .key-badge,
+        .hotkey-row.end-key .key-name {
+            color: #ef4444;
         }
 
         /* Footer */
@@ -415,11 +429,11 @@
             <p>Go dili ile geliştirilmiş ultra hafif Win32 GDI overlay arayüzü. Otomatik offset senkronizasyon hattı ile her zaman güncel.</p>
         </section>
 
-        <!-- Dynamic Stats + Last Offset Time -->
+        <!-- Dynamic Stats -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-value" id="lastOffsetTime">Yükleniyor...</div>
-                <div class="stat-label">Son Offset Güncellemesi (UTC+3)</div>
+                <div class="stat-label">Son Offset Güncellemesi</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">Go 1.22</div>
@@ -436,7 +450,7 @@
             <div class="card-main">
                 <div class="card-header">
                     <h2>Sürümler ve Derlemeler</h2>
-                    <p>CI/CD otomasyonu tarafından güncellenen aktif branch'ler (UTC+3 Istanbul):</p>
+                    <p>CI/CD otomasyonu tarafından güncellenen aktif branch'ler:</p>
                 </div>
 
                 <div class="branches-list" id="branchesList">
@@ -447,7 +461,7 @@
             </div>
         </section>
 
-        <!-- Hotkeys Guide (Sadece Kısayollar) -->
+        <!-- Hotkeys Guide -->
         <section class="section-container">
             <div class="card-main">
                 <div class="card-header">
@@ -455,53 +469,51 @@
                     <p>Yazılım içi kontrol tuşları ve işlevleri</p>
                 </div>
 
-                <div class="hotkeys-grid">
-                    <div class="hotkey-item">
-                        <span class="key-code">[F1]</span>
-                        <span class="key-label">Box ESP</span>
+                <div class="hotkeys-list">
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F1]</span>
+                        <span class="key-name">Box ESP</span>
                     </div>
-                    <div class="hotkey-item">
-                        <span class="key-code">[F2]</span>
-                        <span class="key-label">Skeleton ESP</span>
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F2]</span>
+                        <span class="key-name">Skeleton ESP</span>
                     </div>
-                    <div class="hotkey-item">
-                        <span class="key-code">[F3]</span>
-                        <span class="key-label">Head Circle</span>
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F3]</span>
+                        <span class="key-name">Head Circle</span>
                     </div>
-                    <div class="hotkey-item">
-                        <span class="key-code">[F4]</span>
-                        <span class="key-label">Team Check</span>
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F4]</span>
+                        <span class="key-name">Team Check</span>
                     </div>
-                    <div class="hotkey-item">
-                        <span class="key-code">[F5]</span>
-                        <span class="key-label">Health Bar</span>
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F5]</span>
+                        <span class="key-name">Health Bar</span>
                     </div>
-                    <div class="hotkey-item">
-                        <span class="key-code">[F6]</span>
-                        <span class="key-label">Player Name</span>
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F6]</span>
+                        <span class="key-name">Player Name</span>
                     </div>
-                    <div class="hotkey-item">
-                        <span class="key-code">[F7]</span>
-                        <span class="key-label">Distance Display</span>
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F7]</span>
+                        <span class="key-name">Distance Display</span>
                     </div>
-                    <div class="hotkey-item">
-                        <div>
-                            <span class="key-code">[F8]</span>
-                            <span class="key-label">Skeleton Color</span>
-                        </div>
-                        <span class="key-options">(MAVİ / YEŞİL / KIRMIZI)</span>
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F8]</span>
+                        <span class="key-name">Skeleton Color</span>
+                        <span class="key-options">MAVİ / YEŞİL / KIRMIZI</span>
                     </div>
-                    <div class="hotkey-item">
-                        <span class="key-code">[F9]</span>
-                        <span class="key-label">Armor Bar</span>
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F9]</span>
+                        <span class="key-name">Armor Bar</span>
                     </div>
-                    <div class="hotkey-item">
-                        <span class="key-code">[F10]</span>
-                        <span class="key-label">Hitmarker & Sound</span>
+                    <div class="hotkey-row">
+                        <span class="key-badge">[F10]</span>
+                        <span class="key-name">Hitmarker & Sound</span>
                     </div>
-                    <div class="hotkey-item" style="grid-column: 1 / -1;">
-                        <span class="key-code" style="color: #ef4444;">[END]</span>
-                        <span class="key-label" style="color: #ef4444; font-weight: 700;">Hileyi Kapat / Close Cheat</span>
+                    <div class="hotkey-row end-key">
+                        <span class="key-badge">[END]</span>
+                        <span class="key-name">Hileyi Kapat / Close Cheat</span>
                     </div>
                 </div>
             </div>
@@ -516,7 +528,7 @@
         const owner = "bxiefr";
         const repo = "mesnevi_external";
 
-        // Tema Yönetimi (Aydınlık / Karanlık / Otomatik)
+        // Tema Yönetimi
         function toggleTheme() {
             const html = document.documentElement;
             const currentTheme = html.getAttribute("data-theme");
@@ -539,13 +551,12 @@
             }
         }
 
-        // Sayfa açıldığında hafızadaki veya sistemdeki temayı yükle
         const savedTheme = localStorage.getItem("theme") || 
             (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
         document.documentElement.setAttribute("data-theme", savedTheme);
         updateThemeUI(savedTheme);
 
-        // Branch'leri ve Son Güncelleme Tarihlerini Çek
+        // Branch'leri ve Tarihleri Çek (UTC+3 ibareleri kaldırıldı)
         async function loadBranches() {
             const branchesList = document.getElementById('branchesList');
             try {
@@ -580,7 +591,7 @@
                                 🌿 ${branch.name}
                                 ${branch.name === 'v1.8.3main' ? '<span class="tag-default">Varsayılan</span>' : ''}
                             </div>
-                            <div class="branch-time">Son Güncelleme (UTC+3): ${formattedDate}</div>
+                            <div class="branch-time">Son Güncelleme: ${formattedDate}</div>
                         </div>
                         <a href="https://github.com/${owner}/${repo}/tree/${branch.name}" target="_blank" class="btn-download">
                             <span>📦</span> İncele & İndir
@@ -593,7 +604,7 @@
             }
         }
 
-        // Son Offset Zamanını İstatistiğe Ekle
+        // Son Offset Zamanını Çek (UTC+3 ibareleri kaldırıldı)
         async function loadLastOffsetTime() {
             const statBox = document.getElementById('lastOffsetTime');
             try {
