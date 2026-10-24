@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
+        :root[data-theme="dark"] {
             --bg-primary: #0a0b0e;
             --bg-secondary: #12141a;
             --bg-card: rgba(22, 26, 35, 0.75);
@@ -21,9 +21,21 @@
             --accent-green: #10b981;
             --accent-glow: rgba(59, 130, 246, 0.25);
             --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-            --radius-lg: 20px;
-            --radius-md: 14px;
-            --radius-sm: 8px;
+        }
+
+        :root[data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #e2e8f0;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --border-accent: rgba(59, 130, 246, 0.5);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-blue: #2563eb;
+            --accent-purple: #7c3aed;
+            --accent-green: #059669;
+            --accent-glow: rgba(37, 99, 235, 0.15);
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -31,7 +43,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Comfortaa', cursive, sans-serif;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: background-color 0.25s, color 0.25s, border-color 0.25s;
         }
 
         body {
@@ -103,12 +115,13 @@
             width: 44px;
             height: 44px;
             background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
-            border-radius: var(--radius-md);
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
             font-size: 1.3rem;
+            color: #fff;
             box-shadow: 0 0 20px var(--accent-glow);
         }
 
@@ -116,9 +129,6 @@
             font-size: 1.25rem;
             font-weight: 700;
             letter-spacing: -0.5px;
-            background: linear-gradient(to right, #fff, var(--text-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .header-nav {
@@ -127,11 +137,11 @@
             gap: 12px;
         }
 
-        .nav-btn {
+        .theme-toggle, .nav-btn {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 999px;
             text-decoration: none;
             font-size: 0.88rem;
@@ -139,10 +149,11 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
             backdrop-filter: blur(10px);
         }
 
-        .nav-btn:hover {
+        .theme-toggle:hover, .nav-btn:hover {
             border-color: var(--border-accent);
             transform: translateY(-2px);
             box-shadow: 0 10px 20px -5px var(--accent-glow);
@@ -151,7 +162,7 @@
         /* Hero Section */
         .hero {
             max-width: 900px;
-            margin: 60px auto 40px auto;
+            margin: 50px auto 30px auto;
             padding: 0 24px;
             text-align: center;
         }
@@ -180,14 +191,11 @@
         }
 
         .hero h1 {
-            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
             font-weight: 700;
             line-height: 1.15;
             letter-spacing: -1.5px;
             margin-bottom: 20px;
-            background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .hero p {
@@ -197,20 +205,20 @@
             margin-bottom: 36px;
         }
 
-        /* Quick Stats Grid */
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
             max-width: 1000px;
-            margin: 0 auto 50px auto;
+            margin: 0 auto 40px auto;
             padding: 0 24px;
         }
 
         .stat-card {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
+            border-radius: 14px;
             padding: 20px;
             text-align: center;
             backdrop-filter: blur(12px);
@@ -229,17 +237,17 @@
             color: var(--text-secondary);
         }
 
-        /* Container & Cards */
+        /* Section Container */
         .section-container {
             max-width: 1100px;
-            margin: 0 auto 60px auto;
+            margin: 0 auto 50px auto;
             padding: 0 24px;
         }
 
         .card-main {
             background: var(--bg-card);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
+            border-radius: 20px;
             padding: 36px;
             backdrop-filter: blur(16px);
             box-shadow: var(--shadow);
@@ -268,9 +276,9 @@
         }
 
         .branch-card {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(125, 125, 125, 0.05);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
+            border-radius: 14px;
             padding: 18px 24px;
             display: flex;
             align-items: center;
@@ -281,7 +289,6 @@
 
         .branch-card:hover {
             border-color: var(--border-accent);
-            background: rgba(255, 255, 255, 0.05);
         }
 
         .branch-meta {
@@ -327,19 +334,19 @@
             box-shadow: 0 4px 15px var(--accent-glow);
         }
 
-        /* Console Style Controls Grid */
-        .console-grid {
+        /* Hotkey Grid (Sadece Kısayollar) */
+        .hotkeys-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 12px;
             margin-top: 20px;
             font-family: 'JetBrains Mono', monospace;
         }
 
-        .console-item {
-            background: rgba(0, 0, 0, 0.4);
+        .hotkey-item {
+            background: rgba(125, 125, 125, 0.04);
             border: 1px solid var(--border-color);
-            border-radius: var(--radius-sm);
+            border-radius: 8px;
             padding: 12px 18px;
             display: flex;
             align-items: center;
@@ -347,23 +354,23 @@
             font-size: 0.9rem;
         }
 
-        .console-item:hover {
+        .hotkey-item:hover {
             border-color: var(--border-accent);
         }
 
-        .key-text {
-            color: #f3f4f6;
-            font-weight: 500;
-        }
-
-        .status-badge-on {
-            color: var(--accent-green);
+        .key-code {
+            color: var(--accent-blue);
             font-weight: 700;
         }
 
-        .status-badge-color {
-            color: #3b82f6;
-            font-weight: 700;
+        .key-label {
+            color: var(--text-primary);
+        }
+
+        .key-options {
+            color: var(--accent-purple);
+            font-size: 0.78rem;
+            font-weight: 600;
         }
 
         /* Footer */
@@ -390,8 +397,11 @@
             <div class="brand-name">MESNEVI External</div>
         </div>
         <div class="header-nav">
+            <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">
+                <span id="themeIcon">☀️</span> <span id="themeText">Aydınlık Mod</span>
+            </button>
             <a href="https://github.com/bxiefr/mesnevi_external" target="_blank" class="nav-btn">
-                <span>⚡</span> GitHub Repository
+                <span>⚡</span> GitHub
             </a>
         </div>
     </header>
@@ -437,54 +447,61 @@
             </div>
         </section>
 
-        <!-- Hotkeys Guide (Hile Menüsünün Birebir Aynısı) -->
+        <!-- Hotkeys Guide (Sadece Kısayollar) -->
         <section class="section-container">
             <div class="card-main">
                 <div class="card-header">
                     <h2>KISAYOL TUŞLARI (HOTKEYS)</h2>
-                    <p>Yazılım içi kontrol ve varsayılan başlangıç değerleri</p>
+                    <p>Yazılım içi kontrol tuşları ve işlevleri</p>
                 </div>
 
-                <div class="console-grid">
-                    <div class="console-item">
-                        <span class="key-text">[F1] Box ESP</span>
-                        <span class="status-badge-on">[  AÇIK   ]</span>
+                <div class="hotkeys-grid">
+                    <div class="hotkey-item">
+                        <span class="key-code">[F1]</span>
+                        <span class="key-label">Box ESP</span>
                     </div>
-                    <div class="console-item">
-                        <span class="key-text">[F2] Skeleton ESP</span>
-                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    <div class="hotkey-item">
+                        <span class="key-code">[F2]</span>
+                        <span class="key-label">Skeleton ESP</span>
                     </div>
-                    <div class="console-item">
-                        <span class="key-text">[F3] Head Circle</span>
-                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    <div class="hotkey-item">
+                        <span class="key-code">[F3]</span>
+                        <span class="key-label">Head Circle</span>
                     </div>
-                    <div class="console-item">
-                        <span class="key-text">[F4] Team Check</span>
-                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    <div class="hotkey-item">
+                        <span class="key-code">[F4]</span>
+                        <span class="key-label">Team Check</span>
                     </div>
-                    <div class="console-item">
-                        <span class="key-text">[F5] Health Bar</span>
-                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    <div class="hotkey-item">
+                        <span class="key-code">[F5]</span>
+                        <span class="key-label">Health Bar</span>
                     </div>
-                    <div class="console-item">
-                        <span class="key-text">[F6] Player Name</span>
-                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    <div class="hotkey-item">
+                        <span class="key-code">[F6]</span>
+                        <span class="key-label">Player Name</span>
                     </div>
-                    <div class="console-item">
-                        <span class="key-text">[F7] Distance Display</span>
-                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    <div class="hotkey-item">
+                        <span class="key-code">[F7]</span>
+                        <span class="key-label">Distance Display</span>
                     </div>
-                    <div class="console-item">
-                        <span class="key-text">[F8] Skeleton Color</span>
-                        <span class="status-badge-color">[  MAVİ   ]</span>
+                    <div class="hotkey-item">
+                        <div>
+                            <span class="key-code">[F8]</span>
+                            <span class="key-label">Skeleton Color</span>
+                        </div>
+                        <span class="key-options">(MAVİ / YEŞİL / KIRMIZI)</span>
                     </div>
-                    <div class="console-item">
-                        <span class="key-text">[F9] Armor Bar</span>
-                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    <div class="hotkey-item">
+                        <span class="key-code">[F9]</span>
+                        <span class="key-label">Armor Bar</span>
                     </div>
-                    <div class="console-item">
-                        <span class="key-text">[F10] Hitmarker & Sound</span>
-                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    <div class="hotkey-item">
+                        <span class="key-code">[F10]</span>
+                        <span class="key-label">Hitmarker & Sound</span>
+                    </div>
+                    <div class="hotkey-item" style="grid-column: 1 / -1;">
+                        <span class="key-code" style="color: #ef4444;">[END]</span>
+                        <span class="key-label" style="color: #ef4444; font-weight: 700;">Hileyi Kapat / Close Cheat</span>
                     </div>
                 </div>
             </div>
@@ -499,7 +516,36 @@
         const owner = "bxiefr";
         const repo = "mesnevi_external";
 
-        // 1. Branch'leri ve Son Güncelleme Tarihlerini Çek
+        // Tema Yönetimi (Aydınlık / Karanlık / Otomatik)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            
+            html.setAttribute("data-theme", newTheme);
+            localStorage.setItem("theme", newTheme);
+            updateThemeUI(newTheme);
+        }
+
+        function updateThemeUI(theme) {
+            const themeIcon = document.getElementById("themeIcon");
+            const themeText = document.getElementById("themeText");
+            if (theme === "dark") {
+                themeIcon.innerText = "☀️";
+                themeText.innerText = "Aydınlık Mod";
+            } else {
+                themeIcon.innerText = "🌙";
+                themeText.innerText = "Karanlık Mod";
+            }
+        }
+
+        // Sayfa açıldığında hafızadaki veya sistemdeki temayı yükle
+        const savedTheme = localStorage.getItem("theme") || 
+            (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        document.documentElement.setAttribute("data-theme", savedTheme);
+        updateThemeUI(savedTheme);
+
+        // Branch'leri ve Son Güncelleme Tarihlerini Çek
         async function loadBranches() {
             const branchesList = document.getElementById('branchesList');
             try {
@@ -547,7 +593,7 @@
             }
         }
 
-        // 2. En Son Offset Güncelleme Tarihini Çekip İstatistik Kartına Yaz
+        // Son Offset Zamanını İstatistiğe Ekle
         async function loadLastOffsetTime() {
             const statBox = document.getElementById('lastOffsetTime');
             try {
