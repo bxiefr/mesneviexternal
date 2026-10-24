@@ -302,7 +302,6 @@
             justify-content: center;
         }
 
-        /* Precise cropping to completely isolate the console menu and cut off top title bar & paths */
         .window-crop-box img {
             width: 100%;
             height: 100%;
@@ -359,7 +358,7 @@
             border-radius: 999px;
         }
 
-        /* Download Section */
+        /* Download Section & Dynamic Branches */
         .download-section {
             max-width: 1200px;
             margin: 30px auto 20px auto;
@@ -383,57 +382,71 @@
             margin-bottom: 12px;
         }
 
-        /* Branch Selector Switcher */
-        .branch-selector {
-            display: inline-flex;
+        /* Dynamic Branch List Container */
+        .dynamic-branch-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 600px;
+            margin: 20px auto 28px auto;
+            text-align: left;
+        }
+
+        .branch-item {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            justify-content: space-between;
+            padding: 14px 18px;
             background-color: var(--bg-secondary);
-            padding: 4px;
-            border-radius: 999px;
             border: 1px solid var(--border-color);
-            margin: 16px 0 20px 0;
+            border-radius: var(--radius-md);
+            gap: 12px;
+        }
+
+        .branch-info {
+            display: flex;
+            flex-direction: column;
             gap: 4px;
         }
 
-        .branch-btn {
-            padding: 8px 18px;
-            border-radius: 999px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
+        .branch-name-tag {
+            font-family: 'JetBrains Mono', monospace;
             font-weight: 700;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .branch-btn.active {
+        .branch-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .branch-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .branch-dl-btn {
             background-color: var(--accent-black);
             color: var(--accent-white);
-            box-shadow: var(--shadow);
-        }
-
-        .download-meta {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 10px 0 28px 0;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            flex-wrap: wrap;
-        }
-
-        .download-meta span {
-            background-color: var(--bg-secondary);
-            padding: 6px 14px;
+            padding: 8px 16px;
             border-radius: 999px;
-            border: 1px solid var(--border-color);
-            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
         }
 
-        .meta-build {
-            background-color: var(--accent-black) !important;
-            color: var(--accent-white) !important;
-            border-color: var(--accent-black) !important;
+        .branch-dl-btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
         }
 
         /* Features Grid */
@@ -583,23 +596,13 @@
         <section class="download-section" id="download">
             <div class="download-card">
                 <h2>Download MESNEVI</h2>
-                <p style="color: var(--text-secondary); font-size: 0.95rem;">Select your preferred branch for deployment:</p>
+                <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 10px;">Active branches & latest automated builds loaded from GitHub:</p>
                 
-                <!-- Branch Selector -->
-                <div class="branch-selector">
-                    <button class="branch-btn active" id="branchMain">main</button>
-                    <button class="branch-btn" id="branchNewFeatures">newfeatures</button>
-                </div>
-
-                <div class="download-meta">
-                    <span id="metaBranch">Branch: main</span>
-                    <span id="metaBuildDate" class="meta-build">Last Build: Fetching...</span>
-                    <span id="metaTarget">Target: CS2</span>
-                    <span id="metaAutoUpdate">Auto-Offset Fetch: Active</span>
-                </div>
-
-                <div class="cta-group">
-                    <a href="https://github.com/bxiefr/mesnevi_external/releases" target="_blank" class="btn btn-primary" id="downloadBtn"><span>⬇</span> Download Latest Release</a>
+                <!-- Dynamic Branch Selector Container -->
+                <div class="dynamic-branch-container" id="branchContainer">
+                    <div class="branch-item" style="justify-content: center; color: var(--text-secondary);">
+                        Fetching active branches from GitHub...
+                    </div>
                 </div>
             </div>
         </section>
@@ -641,12 +644,7 @@
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
         const themeText = document.getElementById('themeText');
-
-        const branchMain = document.getElementById('branchMain');
-        const branchNewFeatures = document.getElementById('branchNewFeatures');
-        const metaBranch = document.getElementById('metaBranch');
-        const metaBuildDate = document.getElementById('metaBuildDate');
-        const downloadBtn = document.getElementById('downloadBtn');
+        const branchContainer = document.getElementById('branchContainer');
 
         // Carousel / Cycle Script
         const track = document.getElementById('carouselTrack');
@@ -669,46 +667,67 @@
             updateCarousel();
         });
 
-        // Fetch latest commit/build date dynamically from GitHub API
-        async function fetchBuildDate(branch = 'main') {
+        // Fetch active branches and their latest build/commit dates dynamically from GitHub API
+        async function fetchGitHubBranches() {
             try {
-                metaBuildDate.textContent = 'Last Build: Checking...';
-                const response = await fetch(`https://api.github.com/repos/bxiefr/mesnevi_external/commits/${branch}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    const dateObj = new Date(data.commit.committer.date);
-                    const formattedDate = dateObj.toLocaleDateString('tr-TR', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                    metaBuildDate.textContent = `Last Build: ${formattedDate}`;
-                } else {
-                    metaBuildDate.textContent = 'Last Build: Auto (Latest)';
+                const owner = "bxiefr";
+                const repo = "mesnevi_external";
+                
+                const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/branches`);
+                if (!response.ok) throw new Error("API limit or repo not found");
+                
+                const branches = await response.json();
+                branchContainer.innerHTML = "";
+
+                for (const branch of branches) {
+                    const branchName = branch.name;
+                    const commitSha = branch.commit.sha;
+                    
+                    // Fetch individual commit details to get the exact committer date
+                    let lastBuildText = "Latest Build";
+                    try {
+                        const commitRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits/${commitSha}`);
+                        if (commitRes.ok) {
+                            const commitData = await commitRes.json();
+                            const dateObj = new Date(commitData.commit.committer.date);
+                            lastBuildText = dateObj.toLocaleDateString('tr-TR', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
+                        }
+                    } catch (e) {
+                        // Fallback if individual commit fetch fails
+                    }
+
+                    // Build item element
+                    const item = document.createElement('div');
+                    item.className = 'branch-item';
+                    item.innerHTML = `
+                        <div class="branch-info">
+                            <span class="branch-name-tag">
+                                🌿 ${branchName} ${branchName === 'main' ? '<span style="font-size: 0.7rem; padding: 2px 6px; background: var(--border-color); border-radius: 4px;">Default</span>' : ''}
+                            </span>
+                            <span class="branch-date">Last Build / Commit: ${lastBuildText}</span>
+                        </div>
+                        <div class="branch-actions">
+                            <a href="https://github.com/${owner}/${repo}/tree/${branchName}" target="_blank" class="branch-dl-btn">
+                                <span>📂</span> View / Download
+                            </a>
+                        </div>
+                    `;
+                    branchContainer.appendChild(item);
                 }
             } catch (err) {
-                metaBuildDate.textContent = 'Last Build: Auto (Latest)';
+                branchContainer.innerHTML = `
+                    <div class="branch-item" style="justify-content: center; color: #ef4444;">
+                        Failed to fetch active branches from GitHub API.
+                    </div>
+                `;
             }
         }
-
-        // Dynamic Branch Selection Logic
-        branchMain.addEventListener('click', () => {
-            branchMain.classList.add('active');
-            branchNewFeatures.classList.remove('active');
-            metaBranch.textContent = 'Branch: main';
-            downloadBtn.href = 'https://github.com/bxiefr/mesnevi_external/releases';
-            fetchBuildDate('main');
-        });
-
-        branchNewFeatures.addEventListener('click', () => {
-            branchNewFeatures.classList.add('active');
-            branchMain.classList.remove('active');
-            metaBranch.textContent = 'Branch: newfeatures (Experimental)';
-            downloadBtn.href = 'https://github.com/bxiefr/mesnevi_external/tree/newfeatures';
-            fetchBuildDate('newfeatures');
-        });
 
         // Theme Management
         const SystemTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -756,7 +775,7 @@
 
         // Initial setup
         applyTheme(currentMode);
-        fetchBuildDate('main');
+        fetchGitHubBranches();
     </script>
 </body>
 </html>
