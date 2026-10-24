@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MESNEVI External | CS2 Memory Visualization Engine</title>
+    <title>MESNEVI External | CS2 Memory Engine</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -200,7 +200,7 @@
         /* Quick Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 16px;
             max-width: 1000px;
             margin: 0 auto 50px auto;
@@ -218,7 +218,7 @@
 
         .stat-value {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 1.6rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--accent-blue);
             margin-bottom: 4px;
@@ -260,6 +260,7 @@
             font-size: 0.9rem;
         }
 
+        /* Branch List */
         .branches-list {
             display: flex;
             flex-direction: column;
@@ -326,86 +327,43 @@
             box-shadow: 0 4px 15px var(--accent-glow);
         }
 
-        /* Timeline / Offset Log Styling */
-        .timeline-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            position: relative;
-        }
-
-        .timeline-item {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 14px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .timeline-item:hover {
-            border-color: rgba(16, 185, 129, 0.4);
-            background: rgba(16, 185, 129, 0.03);
-        }
-
-        .timeline-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .timeline-msg {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .timeline-date {
-            font-size: 0.78rem;
-            color: var(--text-secondary);
-        }
-
-        .timeline-hash {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-sm);
-            color: var(--accent-blue);
-            text-decoration: none;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Controls Guide */
-        .controls-grid {
+        /* Console Style Controls Grid */
+        .console-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+            font-family: 'JetBrains Mono', monospace;
         }
 
-        .control-item {
-            background: rgba(255, 255, 255, 0.02);
+        .console-item {
+            background: rgba(0, 0, 0, 0.4);
             border: 1px solid var(--border-color);
-            padding: 16px;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius-sm);
+            padding: 12px 18px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            font-size: 0.9rem;
         }
 
-        .key-badge {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            padding: 6px 12px;
-            border-radius: var(--radius-sm);
-            font-family: 'JetBrains Mono', monospace;
+        .console-item:hover {
+            border-color: var(--border-accent);
+        }
+
+        .key-text {
+            color: #f3f4f6;
+            font-weight: 500;
+        }
+
+        .status-badge-on {
+            color: var(--accent-green);
             font-weight: 700;
-            color: var(--accent-blue);
-            font-size: 0.85rem;
+        }
+
+        .status-badge-color {
+            color: #3b82f6;
+            font-weight: 700;
         }
 
         /* Footer */
@@ -447,11 +405,11 @@
             <p>Go dili ile geliştirilmiş ultra hafif Win32 GDI overlay arayüzü. Otomatik offset senkronizasyon hattı ile her zaman güncel.</p>
         </section>
 
-        <!-- Dynamic Stats -->
+        <!-- Dynamic Stats + Last Offset Time -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-value" id="statBranches">3</div>
-                <div class="stat-label">Aktif Sürüm</div>
+                <div class="stat-value" id="lastOffsetTime">Yükleniyor...</div>
+                <div class="stat-label">Son Offset Güncellemesi (UTC+3)</div>
             </div>
             <div class="stat-card">
                 <div class="stat-value">Go 1.22</div>
@@ -479,46 +437,54 @@
             </div>
         </section>
 
-        <!-- NEW: Offset Update Timeline -->
+        <!-- Hotkeys Guide (Hile Menüsünün Birebir Aynısı) -->
         <section class="section-container">
             <div class="card-main">
                 <div class="card-header">
-                    <h2>🔄 Offset Güncelleme Geçmişi</h2>
-                    <p>Otomasyon botu tarafından `offsets.json` üzerinde yapılan son güncellemeler:</p>
+                    <h2>KISAYOL TUŞLARI (HOTKEYS)</h2>
+                    <p>Yazılım içi kontrol ve varsayılan başlangıç değerleri</p>
                 </div>
 
-                <div class="timeline-list" id="offsetHistory">
-                    <div style="text-align: center; padding: 20px; color: var(--text-secondary);">
-                        Geçmiş loglar çekiliyor...
+                <div class="console-grid">
+                    <div class="console-item">
+                        <span class="key-text">[F1] Box ESP</span>
+                        <span class="status-badge-on">[  AÇIK   ]</span>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Hotkeys Guide -->
-        <section class="section-container">
-            <div class="card-main">
-                <div class="card-header">
-                    <h2>Konsol ve Kısayol Tuşları</h2>
-                    <p>Yazılım içi kontrol tuşları</p>
-                </div>
-
-                <div class="controls-grid">
-                    <div class="control-item">
-                        <span>ESP Görselleri</span>
-                        <span class="key-badge">F1 / F2</span>
+                    <div class="console-item">
+                        <span class="key-text">[F2] Skeleton ESP</span>
+                        <span class="status-badge-on">[  AÇIK   ]</span>
                     </div>
-                    <div class="control-item">
-                        <span>İskelet Rengi Değiştir</span>
-                        <span class="key-badge">F8</span>
+                    <div class="console-item">
+                        <span class="key-text">[F3] Head Circle</span>
+                        <span class="status-badge-on">[  AÇIK   ]</span>
                     </div>
-                    <div class="control-item">
-                        <span>Hitmarker & Ses</span>
-                        <span class="key-badge">F10</span>
+                    <div class="console-item">
+                        <span class="key-text">[F4] Team Check</span>
+                        <span class="status-badge-on">[  AÇIK   ]</span>
                     </div>
-                    <div class="control-item">
-                        <span>Hileyi Kapat</span>
-                        <span class="key-badge">END</span>
+                    <div class="console-item">
+                        <span class="key-text">[F5] Health Bar</span>
+                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    </div>
+                    <div class="console-item">
+                        <span class="key-text">[F6] Player Name</span>
+                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    </div>
+                    <div class="console-item">
+                        <span class="key-text">[F7] Distance Display</span>
+                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    </div>
+                    <div class="console-item">
+                        <span class="key-text">[F8] Skeleton Color</span>
+                        <span class="status-badge-color">[  MAVİ   ]</span>
+                    </div>
+                    <div class="console-item">
+                        <span class="key-text">[F9] Armor Bar</span>
+                        <span class="status-badge-on">[  AÇIK   ]</span>
+                    </div>
+                    <div class="console-item">
+                        <span class="key-text">[F10] Hitmarker & Sound</span>
+                        <span class="status-badge-on">[  AÇIK   ]</span>
                     </div>
                 </div>
             </div>
@@ -533,7 +499,7 @@
         const owner = "bxiefr";
         const repo = "mesnevi_external";
 
-        // 1. Branch ve İndirme Bilgilerini Çek
+        // 1. Branch'leri ve Son Güncelleme Tarihlerini Çek
         async function loadBranches() {
             const branchesList = document.getElementById('branchesList');
             try {
@@ -544,7 +510,7 @@
                 branchesList.innerHTML = "";
 
                 for (const branch of branches) {
-                    if (branch.name === "cli") continue; // Otomasyon branch'ini gizle
+                    if (branch.name === "cli") continue;
 
                     let formattedDate = "Tarih bilgisi alınamadı";
                     try {
@@ -581,50 +547,31 @@
             }
         }
 
-        // 2. Offset Commit Geçmişini Çek (Timeline)
-        async function loadOffsetHistory() {
-            const historyList = document.getElementById('offsetHistory');
+        // 2. En Son Offset Güncelleme Tarihini Çekip İstatistik Kartına Yaz
+        async function loadLastOffsetTime() {
+            const statBox = document.getElementById('lastOffsetTime');
             try {
-                // v1.8.3main branch'indeki offsets.json commit geçmişini çekiyoruz
-                const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?path=offsets.json&sha=v1.8.3main&per_page=5`);
+                const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?path=offsets.json&sha=v1.8.3main&per_page=1`);
                 if (!response.ok) throw new Error("API Limit");
 
                 const commits = await response.json();
-                historyList.innerHTML = "";
-
-                if (commits.length === 0) {
-                    historyList.innerHTML = `<div style="text-align: center; color: var(--text-secondary);">Henüz güncelleme geçmişi yok.</div>`;
-                    return;
-                }
-
-                for (const item of commits) {
-                    const rawDate = item.commit.committer.date;
+                if (commits.length > 0) {
+                    const rawDate = commits[0].commit.committer.date;
                     const dateFormatted = new Date(rawDate).toLocaleString('tr-TR', {
                         timeZone: 'Europe/Istanbul',
-                        year: 'numeric', month: 'short', day: 'numeric',
-                        hour: '2-digit', minute: '2-digit'
+                        day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
                     });
-
-                    const row = document.createElement('div');
-                    row.className = 'timeline-item';
-                    row.innerHTML = `
-                        <div class="timeline-info">
-                            <div class="timeline-msg">🟢 ${item.commit.message}</div>
-                            <div class="timeline-date">Tarih (UTC+3): ${dateFormatted} • Yazar: ${item.commit.author.name}</div>
-                        </div>
-                        <a href="${item.html_url}" target="_blank" class="timeline-hash">
-                            ${item.sha.substring(0, 7)}
-                        </a>
-                    `;
-                    historyList.appendChild(row);
+                    statBox.innerText = dateFormatted;
+                } else {
+                    statBox.innerText = "Bilinmiyor";
                 }
             } catch (err) {
-                historyList.innerHTML = `<div style="text-align: center; color: var(--text-secondary);">Offset geçmişi şu an yüklenemiyor.</div>`;
+                statBox.innerText = "Güncel";
             }
         }
 
         loadBranches();
-        loadOffsetHistory();
+        loadLastOffsetTime();
     </script>
 </body>
 </html>
